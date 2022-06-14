@@ -12,19 +12,24 @@
 
 ActiveRecord::Schema[7.0].define(version: 5) do
   create_table "album_collects", force: :cascade do |t|
+    t.integer "personal_collection_id"
+    t.integer "album_id"
     t.datetime "time_created", precision: nil
   end
 
   create_table "albums", force: :cascade do |t|
     t.integer "artist_id"
     t.string "name"
+    t.string "album_spotify_id"
   end
 
   create_table "artists", force: :cascade do |t|
     t.string "name"
+    t.string "artist_spotify_id"
   end
 
   create_table "personal_collections", force: :cascade do |t|
+    t.integer "user_id"
     t.string "name"
   end
 

@@ -3,8 +3,7 @@ class CreateArtists < ActiveRecord::Migration[5.2]
     def change
         create_table :artists do |t|
             t.string :name
-            #t.string :artist_name
-            #t.string :artist_spotify_id
+            t.string :artist_spotify_id
         end
     end
 end
