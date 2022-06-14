@@ -1,3 +1,5 @@
+require_relative '../config/environment'
+
 
 kdot = Artist.new("Kendrick Lamar", "Kdot-spotify-id")
 tpab = Album.new("To Pimp a Butterfly", "Tpab-spotify-id")
