@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
     end
 
     def add_album_to_personal_collection(album, personal_collection)
-        new_album_collect = AlbumCollect.create(album: album, personal_collection: personal_collection)
+        AlbumCollect.create(album: album, personal_collection: personal_collection)
     end
 
 end

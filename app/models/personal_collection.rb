@@ -4,7 +4,7 @@ class PersonalCollection < ActiveRecord::Base
     has_many :albums, through: :album_collects
 
     def albums
-        self.album_collects.map{|collect| collect.album.name}
+        self.album_collects.map{|collect| collect.album}
     end
     
 

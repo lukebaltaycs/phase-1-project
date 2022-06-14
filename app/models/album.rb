@@ -3,4 +3,9 @@ class Album < ActiveRecord::Base
     has_many :album_collects
     has_many :personal_collections, through: :album_collects
 
+    def personal_collections
+        self.album_collects.map{|collect| collect.personal_collection}
+    end
+    
+
 end
