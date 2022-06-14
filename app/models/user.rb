@@ -1,6 +1,5 @@
 class User < ActiveRecord::Base
     has_many :personal_collections
-    has_many :albums
 
 
     def make_new_personal_collection(name)

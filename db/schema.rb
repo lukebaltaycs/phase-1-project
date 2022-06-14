@@ -11,4 +11,25 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 5) do
+  create_table "album_collects", force: :cascade do |t|
+    t.datetime "time_created", precision: nil
+  end
+
+  create_table "albums", force: :cascade do |t|
+    t.integer "artist_id"
+    t.string "name"
+  end
+
+  create_table "artists", force: :cascade do |t|
+    t.string "name"
+  end
+
+  create_table "personal_collections", force: :cascade do |t|
+    t.string "name"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "name"
+  end
+
 end

@@ -1,6 +1,6 @@
 class CreatePersonalCollections < ActiveRecord::Migration[5.2]
     
-    def changes
+    def change
         create_table :personal_collections do |t|
             t.string :name
         end

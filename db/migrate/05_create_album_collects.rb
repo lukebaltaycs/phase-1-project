@@ -1,8 +1,8 @@
 class CreateAlbumCollects < ActiveRecord::Migration[5.2]
     
-    def changes
+    def change
         create_table :album_collects do |t|
-            t.timestamp
+            t.timestamp :time_created
         end
     end
 end
