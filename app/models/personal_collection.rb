@@ -5,5 +5,6 @@ class PersonalCollection < ActiveRecord::Base
     def albums
         self.album_collects.map{|collect| collect.album.name}
     end
+    
 
 end
