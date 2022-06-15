@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
     has_many :personal_collections
+    has_many :links
 
     after_initialize :create_pc, if: :new_record?
 
@@ -23,9 +24,8 @@ class User < ActiveRecord::Base
         self.save_album(Album.find_by(name: name), personal_collection)
     end
 
-    def add_link_thru_post(album, link_string)
-        new_post = Post.new(user: self, info: link_string, valid: true, time_created: DateTime.current())
-        album.link = (soundcloud, new_post)
+    def add_link(album, link_string)
+        new_link = Link.new(user: self, album: album, info: link_string, valid: true, time_created: DateTime.current())
     end
 
 end
