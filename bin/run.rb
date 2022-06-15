@@ -5,6 +5,7 @@ Artist.delete_all
 User.delete_all
 PersonalCollection.delete_all
 AlbumCollect.delete_all
+Link.delete_all
 
 kdot = Artist.create(:name=> "Kendrick Lamar", :artist_spotify_id=> "Kdot-spotify-id")
 kdot.enter_album("To Pimp A Butterfly", "Tpab-spotify-id")
@@ -19,6 +20,10 @@ lukepc = luke.make_new_personal_collection("classics")
 luke.add_album_to_personal_collection(Album.find_by(name: "To Pimp A Butterfly"), lukepc)
 luke.add_album_to_personal_collection(Album.find_by(name: "Room On Fire"), lukepc)
 
-luke.add_link(Album.all.find_by(name: "Damn"), "www.link.com")
+luke.add_link(Album.all.find_by(name: "Damn"), "www.damn.com")
+luke.add_link_easy("Is This It", "https://www.youtube.com/watch?v=RHrGj1IyE0Y&ab_channel=TheStrokes-Topic")
+
+puts Album.find_by_name("Is This It").return_album_links
+Album.find_by_name("Is This It").return_album_info
 
 binding.pry

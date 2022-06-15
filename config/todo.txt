@@ -8,3 +8,5 @@ make methods to question the validity of a link
 link to spotify API to figure out if an album is on spotify
 
 make CLI
+
+make a review all links(for admin)

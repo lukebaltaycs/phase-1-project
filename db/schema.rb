@@ -33,6 +33,7 @@ ActiveRecord::Schema[7.0].define(version: 6) do
     t.integer "album_id"
     t.datetime "time_created", precision: nil
     t.string "info"
+    t.string "site"
     t.boolean "not_disputed"
   end
 

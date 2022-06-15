@@ -28,4 +28,9 @@ class User < ActiveRecord::Base
         new_link = Link.create(user: self, album: album, info: link_string, not_disputed: true, time_created: DateTime.current())
     end
 
+
+    def add_link_easy(album_name, link_string)
+        self.add_link(Album.all.find_by(name: album_name), link_string)
+    end
+
 end
