@@ -9,8 +9,8 @@ Link.delete_all
 
 kdot = Artist.create(:name=> "Kendrick Lamar")
 kdot.enter_album("To Pimp A Butterfly")
-kdot.enter_album("Damn")
-kdot.enter_album("Good Kid M.A.A.D. City")
+kdot.enter_album("DAMN.")
+kdot.enter_album("good kid, m.A.A.d city")
 strokes = Artist.create(name: "The Strokes")
 strokes.enter_album("Is This It")
 strokes.enter_album("Room On Fire")

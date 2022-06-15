@@ -4,7 +4,7 @@ class Album < ActiveRecord::Base
     has_many :album_collects
     has_many :personal_collections, through: :album_collects
 
-    before_create :search_on_spotify
+    after_initialize :search_on_spotify
 
     def personal_collections
         self.album_collects.map{|collect| collect.personal_collection}
@@ -51,20 +51,24 @@ class Album < ActiveRecord::Base
         self.album_spotify_id = RSpotify::Album.search(self.name).first.id
     end
 
-    def spotify_attributes
-        RSpotify.authenticate("2e00d0bdfb384b909cec10a4c8159835", "600b4d53025a4066b7d2bafd74f99cd6")
-        #url = "https://api.spotify.com/v1/albums/#{self.album_spotify_id}"
-        #uri = URI.parse(url)
-        #response = Net::HTTP.get_response(uri)
-        #JSON.parse(response.body)
-        RSpotify::Album.find(self.album_spotify_id)
-    end
-
     def tracks
         RSpotify::Album.find(self.album_spotify_id).tracks_cache.map{|track| track.name}
     end
 
     def check_on_spotify
-        RSpotify::Album.search(self.name).select{|album| album.artists.first.name == self.artist.name}.map{|album| album.name}.include?(self.name)
+        self.write_attribute(:onspotify,  self.check_on_spotify_return)
     end
+
+    def check_on_spotify_return
+        initial = RSpotify::Album.search(self.name).select{|album| album.artists.first.name == self.artist.name}
+        if initial == nil
+            return false 
+        end
+        secondary = initial.map{|album| album.name}
+        if secondary == nil
+            return false
+        end
+        secondary.include?(self.name)
+    end
+
 end
