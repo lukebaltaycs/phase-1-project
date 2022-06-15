@@ -4,7 +4,7 @@ class CreateAlbumCollects < ActiveRecord::Migration[5.2]
         create_table :album_collects do |t|
             t.integer :personal_collection_id
             t.integer :album_id
-            t.timestamp :time_created
+            t.datetime :time_created
         end
     end
 end
