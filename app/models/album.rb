@@ -4,6 +4,8 @@ class Album < ActiveRecord::Base
     has_many :album_collects
     has_many :personal_collections, through: :album_collects
 
+    before_create :search_on_spotify
+
     def personal_collections
         self.album_collects.map{|collect| collect.personal_collection}
     end
@@ -44,4 +46,25 @@ class Album < ActiveRecord::Base
         invalid_link.save
     end
 
+    def search_on_spotify 
+        RSpotify.authenticate("2e00d0bdfb384b909cec10a4c8159835", "600b4d53025a4066b7d2bafd74f99cd6")
+        self.album_spotify_id = RSpotify::Album.search(self.name).first.id
+    end
+
+    def spotify_attributes
+        RSpotify.authenticate("2e00d0bdfb384b909cec10a4c8159835", "600b4d53025a4066b7d2bafd74f99cd6")
+        #url = "https://api.spotify.com/v1/albums/#{self.album_spotify_id}"
+        #uri = URI.parse(url)
+        #response = Net::HTTP.get_response(uri)
+        #JSON.parse(response.body)
+        RSpotify::Album.find(self.album_spotify_id)
+    end
+
+    def tracks
+        RSpotify::Album.find(self.album_spotify_id).tracks_cache.map{|track| track.name}
+    end
+
+    def check_on_spotify
+        RSpotify::Album.search(self.name).select{|album| album.artists.first.name == self.artist.name}.map{|album| album.name}.include?(self.name)
+    end
 end

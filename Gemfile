@@ -6,3 +6,7 @@ gem "sqlite3"
 gem "pry"
 gem "require_all"
 gem "rspotify"
+gem "open-uri"
+gem "json"
+gem 'spotify-client'
+

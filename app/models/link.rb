@@ -14,4 +14,5 @@ class Link < ActiveRecord::Base
         (link_array & sites).first
     end
     
+    
 end
