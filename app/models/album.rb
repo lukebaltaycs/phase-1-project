@@ -9,7 +9,7 @@ class Album < ActiveRecord::Base
     end
 
     def album_links
-        tl = self.links.where(not_disputed: true).order(:time_created)
+        tl = self.links.where(not_disputed: true).order(:time_created).reverse()
         array = []
         tl.each do |link|
             if !array.map{|link| link.site}.any?(link.site)
@@ -36,6 +36,12 @@ class Album < ActiveRecord::Base
 
     def self.find_by_name(name)
         Album.all.find_by(name: name)
+    end
+
+    def link_is_invalid(link_site)
+        invalid_link = self.album_links.select{|link| link.site  == "youtube"}.first
+        invalid_link.update_attribute(:not_disputed, false)
+        invalid_link.save
     end
 
 end
