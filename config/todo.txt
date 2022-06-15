@@ -1,2 +1,4 @@
 
 add custom errors
+
+do metaprogramming initializations

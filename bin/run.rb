@@ -17,7 +17,7 @@ strokes.enter_album("Room On Fire", "Rof-spotify-id")
 luke = User.create(name: "Luke")
 lukepc = luke.make_new_personal_collection("classics")
 luke.add_album_to_personal_collection(Album.find_by(name: "To Pimp A Butterfly"), lukepc)
-luke.add_album_to_personal_collection(Album.find_by(name: "To Pimp A Butterfly"), lukepc)
+luke.add_album_to_personal_collection(Album.find_by(name: "Room On Fire"), lukepc)
 
 
 binding.pry

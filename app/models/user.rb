@@ -22,5 +22,10 @@ class User < ActiveRecord::Base
     def save_album_by_name(name, personal_collection=self.personal_collections.find_by(name: "My Personal Collection"))
         self.save_album(Album.find_by(name: name), personal_collection)
     end
-    
+
+    def add_link_thru_post(album, link_string)
+        new_post = Post.new(user: self, info: link_string, valid: true, time_created: DateTime.current())
+        album.link = (soundcloud, new_post)
+    end
+
 end

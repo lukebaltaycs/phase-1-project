@@ -5,6 +5,6 @@ class Artist < ActiveRecord::Base
         new_album = Album.create(name: name, album_spotify_id: album_spotify_id)
         new_album.artist = self
         self.albums << new_album
-    end 
+    end
     
 end
