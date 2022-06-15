@@ -5,7 +5,7 @@ class CreateLinks < ActiveRecord::Migration[5.2]
             t.integer :album_id
             t.datetime :time_created
             t.string :info
-            t.boolean :valid
+            t.boolean :not_disputed
         end
     end
 end

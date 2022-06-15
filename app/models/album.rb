@@ -8,8 +8,8 @@ class Album < ActiveRecord::Base
         self.album_collects.map{|collect| collect.personal_collection}
     end
 
-    def links
-        self.links.order(:time_created).where(valid: true)
+    def album_links
+        self.links.where(not_disputed: true)
     end
 
 

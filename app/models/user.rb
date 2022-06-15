@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
     end
 
     def add_link(album, link_string)
-        new_link = Link.new(user: self, album: album, info: link_string, valid: true, time_created: DateTime.current())
+        new_link = Link.create(user: self, album: album, info: link_string, not_disputed: true, time_created: DateTime.current())
     end
 
 end
