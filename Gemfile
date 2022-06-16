@@ -9,5 +9,4 @@ gem "rspotify"
 gem "open-uri"
 gem "json"
 gem 'spotify-client'
-
-gem 'lastfm-client', :git => 'http://github.com/pch/lastfm-client.git'
+gem 'lastfm'

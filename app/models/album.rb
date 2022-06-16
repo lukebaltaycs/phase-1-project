@@ -65,11 +65,11 @@ class Album < ActiveRecord::Base
     end
 
     def search_on_lastfm
-        LastFM.api_key     = "227863264027c5a3c3408d22a1fe992d"
-        LastFM.client_name = "Can I have access to the PI for a non-commercial school project?"
-
-        LastFM::Album.get_info(:artist => self.artist.name, :album => self.name)
+        lastfm = Lastfm.new("227863264027c5a3c3408d22a1fe992d", "2d1e640d3a44317c1ca713516f822727")
+        lastfm.album.get_info(artist: self.artist.name, album: self.name)
     end
+
+    
 
     def tracks
         RSpotify::Album.find(self.album_spotify_id).tracks_cache.map{|track| track.name}

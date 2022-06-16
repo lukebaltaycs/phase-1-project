@@ -5,7 +5,8 @@ require 'rspotify'
 require 'open-uri'
 require 'net/http'
 require 'json'
-require 'lastfm-client'
+require 'lastfm'
+
 
 
 require_all "app/models"
