@@ -8,10 +8,10 @@ AlbumCollect.delete_all
 Link.delete_all
 LastFmClone.delete_all
 
-#kdot = Artist.create(:name=> "Kendrick Lamar")
-#kdot.enter_album("To Pimp A Butterfly")
-#kdot.enter_album("DAMN.")
-#kdot.enter_album("good kid, m.A.A.d city")
+kdot = Artist.create(:name=> "Kendrick Lama")
+kdot.enter_album("To Pimp A Butter")
+kdot.enter_album("DAmn")
+kdot.enter_album("good kid, mad city")
 strokes = Artist.create(name: "The Strokes")
 strokes.enter_album("Is This It")
 iti = strokes.albums.first

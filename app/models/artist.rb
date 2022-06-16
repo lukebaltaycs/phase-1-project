@@ -13,6 +13,11 @@ class Artist < ActiveRecord::Base
         self.save      
     end
 
+    def cleanup
+        self.check_name_on_lastfm
+        self.albums.each {|album| album.check_name_on_lastfm}
+    end
+
     def check_name_on_lastfm
         lastfm = Lastfm.new("227863264027c5a3c3408d22a1fe992d", "2d1e640d3a44317c1ca713516f822727")
         self.update_attribute(:name, lastfm.artist.search(artist: self.name)["results"]["artistmatches"].first[1][0]["name"])

@@ -4,4 +4,4 @@ do metaprogramming initializations
 
 make CLI
 
-add additional database to check if the album exists at all and then adapt mthods to it(check_name_on_spotify, add new db id, etc...)
+make sure lastfm albums have the artist name

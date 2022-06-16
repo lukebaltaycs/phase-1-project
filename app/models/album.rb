@@ -16,11 +16,13 @@ class Album < ActiveRecord::Base
         lfc.save
     end
 
-
     def check_name_on_lastfm
         lastfm = Lastfm.new("227863264027c5a3c3408d22a1fe992d", "2d1e640d3a44317c1ca713516f822727")
-        self.update_attribute(:name, lastfm.album.search(album: self.name)["results"]["albummatches"].first[1][0]["name"])
+        self.update_attribute(:name, lastfm.album.search(album: self.name)["results"]["albummatches"].first[1].find{|album| album["artist"] = self.artist}["name"])
+        #if lastfm.album.search(album: self.name)["results"]["albummatches"].first[1][0]["url"] != self.last_fm_clone.last_fm_url
         self.save
+        #self.artist.check_name_on_lastfm
+        #(lastfm.artist.get_top_albums(artist: self.artist.name) & lastfm.album.search(album: self.name)["results"]["albummatches"].first[1])
     end
 
     def personal_collections
@@ -87,8 +89,6 @@ class Album < ActiveRecord::Base
         lastfm = Lastfm.new("227863264027c5a3c3408d22a1fe992d", "2d1e640d3a44317c1ca713516f822727")
         lastfm.album.get_info(artist: self.artist.name, album: self.name)
     end
-
-    
 
     def tracks
         RSpotify::Album.find(self.album_spotify_id).tracks_cache.map{|track| track.name}
