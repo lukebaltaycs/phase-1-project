@@ -10,9 +10,11 @@ class Link < ActiveRecord::Base
 
     def self.parse_link_for_site(link_string)
         link_array = link_string.split(/[.\/]/)
-        sites = ["youtube", "soundcloud", "tidal", "pandora", "amazon"]
-        (link_array & sites).first
+        (link_array & self.site_array).first
     end
-    
+
+    def self.site_array
+        ["youtube", "soundcloud", "tidal", "pandora", "amazon"]
+    end
     
 end

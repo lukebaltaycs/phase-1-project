@@ -1,3 +1,10 @@
+GIT
+  remote: http://github.com/pch/lastfm-client.git
+  revision: 39c4792783f397fb8688e27909ac509a715b8312
+  specs:
+    lastfm-client (0.0.3)
+      json (>= 1.4.6)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -101,6 +108,7 @@ PLATFORMS
 
 DEPENDENCIES
   json
+  lastfm-client!
   open-uri
   pry
   require_all

@@ -6,8 +6,9 @@ class Artist < ActiveRecord::Base
     def enter_album(name)
         new_album = Album.create(name: name)
         new_album.artist = self
-        new_album.check_on_spotify
         self.albums << new_album
+        new_album.assign_onspotify
+        new_album.save
     end
 
     def search_on_spotify 

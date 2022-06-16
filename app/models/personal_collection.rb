@@ -15,5 +15,19 @@ class PersonalCollection < ActiveRecord::Base
         AlbumCollect.create(album: Album.find_by(name: name), personal_collection: self, time_created: DateTime.current())
     end
 
-
+    def check_all_on_spotify
+        on_spot = []
+        self.albums.each do |album|
+            if album.check_on_spotify_return
+                on_spot << album.full_notation
+            end
+        end
+        if on_spot.empty?
+            "Unfortunately every album in #{self.name} is no longer on Spotify."
+        else
+            str = "Good News! These albums are now on Spotify:\n"
+            on_spot.each{|album| str.concat("#{album.full_notation}\n")}
+            str.concat("Happy listening!")
+        end
+    end
 end

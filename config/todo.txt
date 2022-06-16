@@ -8,3 +8,5 @@ link to spotify API to figure out if an album is on spotify
 make CLI
 
 make a review all links(for admin)(part of CLI, do this then)
+
+make check_on_spotify downcase everyting when it checks and then update name if it doesn't match

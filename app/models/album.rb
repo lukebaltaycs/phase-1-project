@@ -4,8 +4,6 @@ class Album < ActiveRecord::Base
     has_many :album_collects
     has_many :personal_collections, through: :album_collects
 
-    after_initialize :search_on_spotify
-
     def personal_collections
         self.album_collects.map{|collect| collect.personal_collection}
     end
@@ -31,7 +29,7 @@ class Album < ActiveRecord::Base
 
     def return_album_info
         info = []
-        info << "#{self.name} by #{self.artist.name}" 
+        info << self.full_notation 
         self.return_album_links.each{|link| info << link}
         info
     end
@@ -40,8 +38,23 @@ class Album < ActiveRecord::Base
         Album.all.find_by(name: name)
     end
 
+    def active_link_sites
+        self.links.where(not_disputed: true).map{|link| link.site}
+    end
+
     def link_is_invalid(link_site)
-        invalid_link = self.album_links.select{|link| link.site  == "youtube"}.first
+        if !Link.site_array.include?(link_site)
+            print_sites = Link.site_array
+            last_site = print_sites.pop
+            string_to_return =  "The site you entered is invalid. Please enter " 
+            print_sites.each{|site| string_to_return.concat("#{site.capitalize()}, ")}
+            return string_to_return + "or #{last_site.capitalize()}."
+        elsif !self.active_link_sites.include?(link_site)
+            str = "#{self.full_notation} does not have an active link for the site #{link_site.capitalize()}. It's current active links are:\n"
+            self.return_album_links.each{|link| str.concat("    #{link}\n")}
+            return str
+        end
+        invalid_link = self.album_links.select{|link| link.site  == link_site}.first
         invalid_link.update_attribute(:not_disputed, false)
         invalid_link.save
     end
@@ -51,16 +64,24 @@ class Album < ActiveRecord::Base
         self.album_spotify_id = RSpotify::Album.search(self.name).first.id
     end
 
+    def search_on_lastfm
+        LastFM.api_key     = "227863264027c5a3c3408d22a1fe992d"
+        LastFM.client_name = "Can I have access to the PI for a non-commercial school project?"
+
+        LastFM::Album.get_info(:artist => self.artist.name, :album => self.name)
+    end
+
     def tracks
         RSpotify::Album.find(self.album_spotify_id).tracks_cache.map{|track| track.name}
     end
 
-    def check_on_spotify
-        self.write_attribute(:onspotify,  self.check_on_spotify_return)
+    def assign_onspotify
+        self.write_attribute(:onspotify, self.check_on_spotify_return)
     end
 
     def check_on_spotify_return
         initial = RSpotify::Album.search(self.name).select{|album| album.artists.first.name == self.artist.name}
+        initial = nil
         if initial == nil
             return false 
         end
@@ -69,6 +90,10 @@ class Album < ActiveRecord::Base
             return false
         end
         secondary.include?(self.name)
+    end
+
+    def full_notation
+        "'#{self.name}' by '#{self.artist.name}'"
     end
 
 end
