@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 7) do
+ActiveRecord::Schema[7.0].define(version: 8) do
   create_table "album_collects", force: :cascade do |t|
     t.integer "personal_collection_id"
     t.integer "album_id"
@@ -27,6 +27,14 @@ ActiveRecord::Schema[7.0].define(version: 7) do
   create_table "artists", force: :cascade do |t|
     t.string "name"
     t.string "artist_spotify_id"
+  end
+
+  create_table "last_fm_clones", force: :cascade do |t|
+    t.integer "album_id"
+    t.string "name"
+    t.string "artist"
+    t.string "last_fm_url"
+    t.string "summary"
   end
 
   create_table "links", force: :cascade do |t|
