@@ -18,7 +18,8 @@ class PersonalCollection < ActiveRecord::Base
     def check_all_on_spotify
         on_spot = []
         self.albums.each do |album|
-            if album.check_on_spotify_return
+            album.assign_onspotify
+            if album.onspotify
                 on_spot << album.full_notation
             end
         end
@@ -26,7 +27,7 @@ class PersonalCollection < ActiveRecord::Base
             "Unfortunately every album in #{self.name} is no longer on Spotify."
         else
             str = "Good News! These albums are now on Spotify:\n"
-            on_spot.each{|album| str.concat("#{album.full_notation}\n")}
+            on_spot.each{|album| str.concat("#{album}\n")}
             str.concat("Happy listening!")
         end
     end

@@ -1,12 +1,7 @@
-
 add custom errors
 
 do metaprogramming initializations
 
-link to spotify API to figure out if an album is on spotify
-
 make CLI
 
-make a review all links(for admin)(part of CLI, do this then)
-
-make check_on_spotify downcase everyting when it checks and then update name if it doesn't match
+add additional database to check if the album exists at all and then adapt mthods to it(check_name_on_spotify, add new db id, etc...)

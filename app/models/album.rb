@@ -79,9 +79,24 @@ class Album < ActiveRecord::Base
         self.write_attribute(:onspotify, self.check_on_spotify_return)
     end
 
+    def render_name_plain
+        self.name.downcase.gsub(/\W/, '')
+    end
+
+    def check_name_on_spotify
+        initial = RSpotify::Album.search(self.name)
+        #.map{|album| album.name.lowercase.gsub(/\W/, '')}
+        initial.each do |album|
+            if album.name.downcase.gsub(/\W/, '') == self.render_name_plain && album.artists.first.name == self.artist.name
+                self.write_attribute(:name, album.name)
+            end
+        end
+        self.save
+        self.assign_onspotify
+    end
+
     def check_on_spotify_return
         initial = RSpotify::Album.search(self.name).select{|album| album.artists.first.name == self.artist.name}
-        initial = nil
         if initial == nil
             return false 
         end
