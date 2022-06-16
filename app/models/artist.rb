@@ -8,7 +8,17 @@ class Artist < ActiveRecord::Base
         new_album.artist = self
         new_album.assign_onspotify
         self.albums << new_album
+       # new_album.add_last_fm_clone
+       # new_album.save
+        self.save      
     end
+
+    def check_name_on_lastfm
+        lastfm = Lastfm.new("227863264027c5a3c3408d22a1fe992d", "2d1e640d3a44317c1ca713516f822727")
+        self.update_attribute(:name, lastfm.artist.search(artist: self.name)["results"]["artistmatches"].first[1][0]["name"])
+        self.save
+    end
+
 
     def search_on_spotify 
         RSpotify.authenticate("2e00d0bdfb384b909cec10a4c8159835", "600b4d53025a4066b7d2bafd74f99cd6")

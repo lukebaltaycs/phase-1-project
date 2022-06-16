@@ -1,8 +1,27 @@
 class Album < ActiveRecord::Base
     belongs_to :artist
     has_many :links
+    has_many :last_fm_clones
     has_many :album_collects
     has_many :personal_collections, through: :album_collects
+
+    def add_last_fm_clone
+        lfc = LastFmClone.create(album: self)
+        info = self.search_on_lastfm
+        lfc.name = info["name"]
+        lfc.artist = info["artist"]
+        lfc.last_fm_url = info["url"]
+        lfc.summary = info["wiki"]["content"]
+        self.last_fm_clones << lfc
+        lfc.save
+    end
+
+
+    def check_name_on_lastfm
+        lastfm = Lastfm.new("227863264027c5a3c3408d22a1fe992d", "2d1e640d3a44317c1ca713516f822727")
+        self.update_attribute(:name, lastfm.album.search(album: self.name)["results"]["albummatches"].first[1][0]["name"])
+        self.save
+    end
 
     def personal_collections
         self.album_collects.map{|collect| collect.personal_collection}
@@ -77,6 +96,7 @@ class Album < ActiveRecord::Base
 
     def assign_onspotify
         self.write_attribute(:onspotify, self.check_on_spotify_return)
+        self.save
     end
 
     def render_name_plain
