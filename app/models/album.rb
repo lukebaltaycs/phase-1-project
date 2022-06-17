@@ -19,6 +19,7 @@ class Album < ActiveRecord::Base
     def check_name_on_lastfm
         lastfm = Lastfm.new("227863264027c5a3c3408d22a1fe992d", "2d1e640d3a44317c1ca713516f822727")
         self.update_attribute(:name, lastfm.album.search(album: self.name)["results"]["albummatches"].first[1].find{|album| album["artist"] = self.artist}["name"])
+        
         #if lastfm.album.search(album: self.name)["results"]["albummatches"].first[1][0]["url"] != self.last_fm_clone.last_fm_url
         self.save
         #self.artist.check_name_on_lastfm
@@ -69,7 +70,8 @@ class Album < ActiveRecord::Base
             last_site = print_sites.pop
             string_to_return =  "The site you entered is invalid. Please enter " 
             print_sites.each{|site| string_to_return.concat("#{site.capitalize()}, ")}
-            return string_to_return + "or #{last_site.capitalize()}."
+            string_to_return + "or #{last_site.capitalize()}."
+            return ""
         elsif !self.active_link_sites.include?(link_site)
             str = "#{self.full_notation} does not have an active link for the site #{link_site.capitalize()}. It's current active links are:\n"
             self.return_album_links.each{|link| str.concat("    #{link}\n")}

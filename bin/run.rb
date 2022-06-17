@@ -1,30 +1,30 @@
 require_relative '../config/environment'
 
-Album.delete_all
-Artist.delete_all
-User.delete_all
-PersonalCollection.delete_all
-AlbumCollect.delete_all
-Link.delete_all
-LastFmClone.delete_all
+#Album.delete_all
+#Artist.delete_all
+#User.delete_all
+#PersonalCollection.delete_all
+#AlbumCollect.delete_all
+#Link.delete_all
+#LastFmClone.delete_all
 
-kdot = Artist.create(:name=> "Kendrick Lama")
-kdot.enter_album("To Pimp A Butter")
-kdot.enter_album("DAmn")
-kdot.enter_album("good kid, mad city")
-strokes = Artist.create(name: "The Strokes")
-strokes.enter_album("Is This It")
-iti = strokes.albums.first
+#kdot = Artist.create(:name=> "Kendrick Lama")
+#kdot.enter_album("To Pimp A Butter")
+#kdot.enter_album("DAmn")
+#kdot.enter_album("good kid, mad city")
+#strokes = Artist.create(name: "The Strokes")
+#strokes.enter_album("Is This It")
+#iti = strokes.albums.first
 #strokes.enter_album("woopadoop")
 #woo = strokes.albums.last
 #strokes.enter_album("Room On Fire")
 
-luke = User.create(name: "Luke")
+#luke = User.create(name: "Luke")
 #lukepc = luke.make_new_personal_collection("classics")
 #luke.add_album_to_personal_collection(Album.find_by(name: "To Pimp A Butterfly"), lukepc)
 #luke.add_album_to_personal_collection(Album.find_by(name: "Room On Fire"), lukepc)
-lpc = luke.personal_collections.first
-lpc.add_album(iti)
+#lpc = luke.personal_collections.first
+#lpc.add_album(iti)
 #lpc.add_album(woo)
 
 
@@ -33,7 +33,7 @@ lpc.add_album(iti)
 #Album.find_by_name("Is This It").link_is_invalid("youtube")
 
 
-binding.pry
+#binding.pry
 
 
 
@@ -41,3 +41,8 @@ binding.pry
 #uri = URI.parse(url)
 #response = Net::HTTP.get_response(uri)
 #JSON.parse(response.body)
+#Cli.clear_charts
+#puts Album.all.first.links.first.info
+Cli.login_page
+
+binding.pry

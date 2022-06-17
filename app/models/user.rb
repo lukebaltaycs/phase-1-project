@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
     has_many :personal_collections
     has_many :links
+    has_many :album_collects, through: :personal_collections
 
     after_initialize :create_pc, if: :new_record?
 
@@ -26,6 +27,8 @@ class User < ActiveRecord::Base
 
     def add_link(album, link_string)
         new_link = Link.create(user: self, album: album, info: link_string, not_disputed: true, time_created: DateTime.current())
+        album.links << new_link
+        new_link.save
     end
 
     def add_link_easy(album_name, link_string)

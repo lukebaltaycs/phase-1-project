@@ -8,8 +8,7 @@ class Artist < ActiveRecord::Base
         new_album.artist = self
         new_album.assign_onspotify
         self.albums << new_album
-       # new_album.add_last_fm_clone
-       # new_album.save
+        new_album.save
         self.save      
     end
 

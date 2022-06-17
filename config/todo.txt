@@ -5,3 +5,5 @@ do metaprogramming initializations
 make CLI
 
 make sure lastfm albums have the artist name
+
+doesn't allow same name twice
