@@ -27,11 +27,13 @@ class Cli
         else
            n = nil
             while n == nil
+                puts ""
                 puts "Enter one of the already registered usernames, or enter 'new' to create an additional account:\n\n"
                 Cli.display_accounts
                 entered_name = gets.chomp
                 if entered_name == "new" || entered_name == "New" || entered_name == "NEW" || entered_name == "n" || entered_name == "N"
-                    puts "Enter a username to begin interacting with the database:"
+                    puts ""
+                    puts "Enter a username to begin interacting with the database:\n\n"
                     n = Cli.create_account.name
                     Cli.me = User.all.find_by(name: n)
                     Cli.me.save
@@ -42,7 +44,8 @@ class Cli
                 end
             end
         end
-        puts "Welcome to the 'Not-On-Spotify' Database, #{Cli.me.name}."
+        puts ""
+        puts "Welcome to the 'Not-On-Spotify' Database, #{Cli.me.name}.\n\n"
         Cli.main_menu
     end
 
@@ -63,7 +66,8 @@ class Cli
     end
 
     def self.no_accounts
-        puts "No users have been registered yet. Enter a username to begin interacting with the database:"
+        puts ""
+        puts "No users have been registered yet. Enter a username to begin interacting with the database:\n\n"
         new_account = Cli.create_account
         Cli.me = new_account
     end
@@ -76,7 +80,8 @@ class Cli
                 n = username
                 new_acc = User.create(name: n)
             else
-                puts "Username must be unique and cannot be 'new'. Enter another name, please:"
+                puts ""
+                puts "Username must be unique and cannot be 'new'. Enter another name, please:\n\n"
             end
         end
         new_acc
@@ -96,6 +101,7 @@ class Cli
     end
 
     def self.put_library
+        puts ""
         puts "These are the artists currently in the database:"
         Cli.view_all_artists
         puts ""
@@ -137,6 +143,24 @@ class Cli
         end
     end
 
+    def self.personal_collections_menu
+    input = ""    
+        while input != 'M'
+            puts "Enter 'V' to view your personal collection, '-' to delete an album from your personal collection, 'S' to check all albums in your personal collection on Spotify, or 'M' to return to the main menu\n\n"
+            input = gets.chomp
+            inputs = input.split(" ")
+            rest_inputs = inputs.drop(1).join(" ")
+            if inputs[0] == "V"
+               puts Cli.me.personal_collections.first.albums.each{|album| puts album.return_album_info}
+            elsif inputs[0] == '-'
+                Cli.me.album_collects.find_by(album: Album.all.find_by_name(rest_inputs)).delete
+            elsif inputs[0] = 'S'
+                puts Cli.me.personal_collections.first.check_all_on_spotify
+            end
+        end
+        Cli.main_menu
+    end
+
     def self.library
         Cli.put_library
         input = ""
@@ -147,16 +171,20 @@ class Cli
             rest_inputs = inputs.drop(1).join(" ")         
             if input[0] == "L"
                 Cli.put_library
+                puts ""
             elsif inputs[0] == "+"
                 Cli.add_artist(rest_inputs)
+                puts ""
             elsif inputs[0] == "+A"
                 Cli.add_album(rest_inputs)
+                puts ""
             elsif input[0] == "A"
                 if Album.find_by_name(rest_inputs) != nil
                     Cli.edit_album(Album.find_by_name(rest_inputs))
                 else
                     puts "#{rest_inputs} is not in the database."
-                    "Add #{rest_inputs} to the database? (Y/n)"
+                    puts "Add #{rest_inputs} to the database? (Y/n)"
+                    puts ""
                     answer = ""
                     while answer != "Y" && answer != "n" 
                         puts "Please answer 'Y' or 'n'"           
@@ -193,7 +221,33 @@ class Cli
             end
             if answer == "n"
                 puts "This may hurt NotOnSpotify's ability to gather correct information from external databases."
-                new_artist.update_attribute(:name, album_name)
+                new_album.update_attribute(:name, album_name)
+            elsif answer == "Y"
+                new_album.add_last_fm_clone
+            end
+        end
+        new_album.save
+        puts "#{new_album.name} was added to database."        
+    end
+
+    def self.add_album_froms(album_name, artist_name)
+        if !Artist.all.map{|artist| artist.name}.include?(artist_name) 
+            puts "Artist was not in database, but was just added."
+            Cli.add_artist(artist_name)
+        end
+        Artist.find_by(name: Artist.last.name).enter_album(album_name)
+        new_album = Album.find_by_name(album_name)
+        new_album.check_name_on_lastfm
+        if album_name != new_album.name
+            answer = ""
+            puts "'#{album_name}' was auto-corrected to '#{new_album.name}'. Is this okay? (Y/n)"
+            while answer != "Y" && answer != "n" 
+                puts "Please answer 'Y' or 'n'"           
+                answer = gets.chomp
+            end
+            if answer == "n"
+                puts "This may hurt NotOnSpotify's ability to gather correct information from external databases."
+                new_album.update_attribute(:name, album_name)
             elsif answer == "Y"
                 new_album.add_last_fm_clone
             end
@@ -203,6 +257,8 @@ class Cli
     end
 
     def self.edit_album(album)
+        puts ""
+        puts "Currently viewing #{album.name} by #{album.artist.name}"
         input = ""
         while input != 'D'
             puts "Enter 'D' to return to the database menu, 'V' to view the album details, '-L' followed by a site name to dispute one of this album's links, '+L' followed by a url to add a link, or '+PC' to add this album to your personal collection, or 'AA' to view all albums by this album's artist\n\n"
@@ -231,14 +287,38 @@ class Cli
         #add to PC ('+PC')
     end
 
+    def self.check_artist_on_lfm(artist_name)
+        lastfm = Lastfm.new("227863264027c5a3c3408d22a1fe992d", "2d1e640d3a44317c1ca713516f822727")
+        lfmname = lastfm.artist.search(artist: artist_name)["results"]["artistmatches"].first[1][0]["name"]
+        if artist_name != lfmname
+            answer = ""
+            puts "'#{artist_name}' was auto-corrected to '#{lfmname}'. Is this okay? (Y/n)"
+            while answer != "Y" && answer != "n" 
+                puts "Please answer 'Y' or 'n'"           
+                answer = gets.chomp
+            end
+            if answer == "n"
+                puts "This may hurt NotOnSpotify's ability to gather correct information from external databases."
+                return artist_name
+            else
+                return lfmname
+            end
+        else
+            return artist_name
+        end
+    end
+
     def self.spot_check
         puts "Enter an album name to check if it is on spotify:"
         album_name = gets.chomp
         puts "Enter an artist name:"
         artist_name = gets.chomp
+        artist_name = check_artist_on_lfm(artist_name)
+        #puts artist_name
         lastfm = Lastfm.new("227863264027c5a3c3408d22a1fe992d", "2d1e640d3a44317c1ca713516f822727")
-        lfmname = lastfm.album.search(album: album_name)["results"]["albummatches"].first[1].find{|album| album["artist"] = artist_name}["name"]
-        searchname = ""
+        #lfmname = lastfm.album.search(album: album_name)["results"]["albummatches"].first[1].find{|album| album["artist"] = artist_name}["name"]
+        lfmname = lastfm.album.search(album: album_name)["results"]["albummatches"].first[1].first["name"]
+        searchname = album_name
         if lfmname != album_name
             puts "'#{album_name}' was auto-corrected to '#{lfmname}'. Is this okay? (Y/n)"
             answer = ""
@@ -252,21 +332,26 @@ class Cli
                 searchname = lfmname
             end
         end
-            RSpotify.authenticate("2e00d0bdfb384b909cec10a4c8159835", "600b4d53025a4066b7d2bafd74f99cd6")
-            if RSpotify::Album.search(searchname) == nil
-                puts "'#{album_name}' is not on spotify. Would you like to add it using the information you've given?"
-                answer = ""
-                while answer != "Y" && answer != "n" 
-                    puts "Please answer 'Y' or 'n'"           
-                    answer = gets.chomp
-                end
-                if answer == "Y"
-                    Cli.add_album(album_name)
-                end
-            else
-                puts "Good news! '#{album_name}' is indeed on Spotify. Happy listening!"
+        RSpotify.authenticate("2e00d0bdfb384b909cec10a4c8159835", "600b4d53025a4066b7d2bafd74f99cd6")
+        init = RSpotify::Album.search(searchname)
+        #if init == nil || !init.collect{|album| album.artists.first.name}.include?(artist_name)
+        if !init.collect{|album| album.name}.include?(searchname) || !init.collect{|album| album.artists.first.name}.include?(artist_name)
+            puts "'#{searchname}' is not on spotify. Would you like to add it using the information you've given?"
+            answer = ""
+            while answer != "Y" && answer != "n" 
+                puts "Please answer 'Y' or 'n'"           
+                answer = gets.chomp
             end
+            if answer == "Y"
+                Cli.add_album_froms(album_name, artist_name)
+            end
+        else
+            puts "Good news! '#{album_name}' is indeed on Spotify. Happy listening!"
+        end
+        Cli.main_menu
     end
+
+
 
     def self.artist_menu
         input = ''
@@ -290,10 +375,12 @@ class Cli
                     end
                     if answer == "Y"
                         Cli.add_artist(rest_inputs)
+                        puts ""
                     end
                 end                
             elsif inputs[0] == "+"
                 Cli.add_artist(rest_inputs)
+                puts ""
             end
         end
         Cli.library
@@ -307,6 +394,7 @@ class Cli
         puts ""
         while input != 'E'
             puts "Enter 'A' to return to Artist menu, '+' followed by an album name to enter a new album, or 'S' followed by an artist name to edit an artist\n\n"
+            puts ""
             input = gets.chomp
             inputs = input.split(" ")
             if inputs[0] == "S"

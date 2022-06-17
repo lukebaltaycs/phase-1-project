@@ -1,7 +1,7 @@
 class Artist < ActiveRecord::Base
     has_many :albums
 
-    before_create :search_on_spotify
+    #before_create :search_on_spotify
 
     def enter_album(name)
         new_album = Album.create(name: name)

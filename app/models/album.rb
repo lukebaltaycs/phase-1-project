@@ -52,7 +52,7 @@ class Album < ActiveRecord::Base
     def return_album_info
         info = []
         info << self.full_notation 
-        self.return_album_links.each{|link| info << link}
+        self.return_album_links.each{|link| info << "   #{link}"}
         info
     end
 
@@ -106,6 +106,8 @@ class Album < ActiveRecord::Base
     end
 
     def check_name_on_spotify
+        RSpotify.authenticate("2e00d0bdfb384b909cec10a4c8159835", "600b4d53025a4066b7d2bafd74f99cd6")
+
         initial = RSpotify::Album.search(self.name)
         #.map{|album| album.name.lowercase.gsub(/\W/, '')}
         initial.each do |album|
@@ -118,6 +120,8 @@ class Album < ActiveRecord::Base
     end
 
     def check_on_spotify_return
+        RSpotify.authenticate("2e00d0bdfb384b909cec10a4c8159835", "600b4d53025a4066b7d2bafd74f99cd6")
+
         initial = RSpotify::Album.search(self.name).select{|album| album.artists.first.name == self.artist.name}
         if initial == nil
             return false 

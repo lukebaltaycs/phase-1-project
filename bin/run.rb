@@ -41,8 +41,23 @@ require_relative '../config/environment'
 #uri = URI.parse(url)
 #response = Net::HTTP.get_response(uri)
 #JSON.parse(response.body)
-#Cli.clear_charts
+Cli.clear_charts
 #puts Album.all.first.links.first.info
+
 Cli.login_page
 
 binding.pry
+
+# Have One On Me by Joanna Newsom
+# https://www.amazon.com/Have-One-Me-Joanna-Newsom/dp/B0034C263A
+# Ys by Joanna Newsom
+# Endless by Frank Ocean
+# https://www.youtube.com/watch?v=AHLFNoT64HQ&ab_channel=DOC-A-THONT.V.
+# Earl by Earl Sweatshirt
+# https://www.soundcloud.com/earl-album-fskabkdjvbkah
+
+#if !init.collect{|album| album.name}.include?(searchname) || !init.collect{|album| album.artists.first.name}.include?(artist_name)
+# 
+
+RSpotify.authenticate("2e00d0bdfb384b909cec10a4c8159835", "600b4d53025a4066b7d2bafd74f99cd6")
+#RSpotify::Album.search("Donda").map{|album| album.artists.first.name}.include?("Kanye West")

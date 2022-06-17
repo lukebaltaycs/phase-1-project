@@ -16,6 +16,8 @@ class PersonalCollection < ActiveRecord::Base
     end
 
     def check_all_on_spotify
+        RSpotify.authenticate("2e00d0bdfb384b909cec10a4c8159835", "600b4d53025a4066b7d2bafd74f99cd6")
+
         on_spot = []
         self.albums.each do |album|
             album.assign_onspotify
@@ -24,7 +26,7 @@ class PersonalCollection < ActiveRecord::Base
             end
         end
         if on_spot.empty?
-            "Unfortunately every album in #{self.name} is no longer on Spotify."
+            "Unfortunately none of the albums on #{self.name} are on Spotify."
         else
             str = "Good News! These albums are now on Spotify:\n"
             on_spot.each{|album| str.concat("#{album}\n")}
